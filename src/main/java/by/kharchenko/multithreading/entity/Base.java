@@ -51,18 +51,9 @@ public class Base {
         }
     }
 
-    public Deque<Terminal> getTerminals() {
-        return terminals;
-    }
-
-    public void setTerminals(Deque<Terminal> terminals) {
-        this.terminals = terminals;
-    }
-
-
     public void acceptVanBehindTheBase(Van van) throws InterruptedException {
         van.setEnumState(Van.EnumState.WAITING);
-        logger.log(Level.INFO, van.getName() + " приехал в очередь за базой. Портящиеся продукты: " + van.isPerishableProducts());
+        logger.log(Level.INFO, van.getName() + " arrived in line behind the base. Perishable products: " + van.isPerishableProducts());
         if (van.isPerishableProducts()) {
             lock.lock();
             countPerishableProductsBehindTheBase.set(countPerishableProductsBehindTheBase.get() + 1);
@@ -71,15 +62,15 @@ public class Base {
             lock.lock();
 
         }
-        lockTerminal(van);
+        getTerminal(van);
     }
 
-    private void lockTerminal(Van van) throws InterruptedException {
+    private void getTerminal(Van van) throws InterruptedException {
         try {
             while (countParkingPlace.get() == 0) ;
             countParkingPlace.set(countParkingPlace.get() - 1);
-            logger.log(Level.INFO, van.getName() + " Заехал на базу. Портящиеся продукты: " + van.isPerishableProducts()
-                    +"\n"+van.getName() + " Количество свободный мест на парковке: " + countParkingPlace.get());
+            logger.log(Level.INFO, van.getName() +" went to the base. Perishable products: " + van.isPerishableProducts()
+                    +"\n"+van.getName() + " number of free parking spaces: " + countParkingPlace.get());
             if (van.isPerishableProducts()) {
                 countPerishableProductsBehindTheBase.set(countPerishableProductsBehindTheBase.get() - 1);
                 countPerishableProductsInBase.set(countPerishableProductsInBase.get() + 1);
@@ -87,7 +78,7 @@ public class Base {
         } finally {
             lock.unlock();
         }
-        logger.log(Level.INFO, van.getName() + " Ожидает терминала. Портящиеся продукты: " + van.isPerishableProducts());
+        logger.log(Level.INFO, van.getName() + " waiting for a terminal. Perishable products: " + van.isPerishableProducts());
         if (!van.isPerishableProducts()) {
             while (countPerishableProductsInBase.get() != 0) ;
         }
@@ -95,25 +86,25 @@ public class Base {
         while ((terminal = terminals.poll()) == null) {
             TimeUnit.MILLISECONDS.sleep(10);
         }
-        van.setMyTerminal(terminal);
-        logger.log(Level.INFO, van.getName() + " Терминал получен. Портящиеся продукты: " + van.isPerishableProducts());
+        van.setTerminal(terminal);
+        logger.log(Level.INFO, van.getName() + " terminal received. Perishable products: " + van.isPerishableProducts());
     }
 
     public void workInTerminal(Van van) throws InterruptedException {
-        logger.log(Level.INFO, van.getName() + " заехал в терминал. Портящиеся продукты: " + van.isPerishableProducts());
+        logger.log(Level.INFO, van.getName() + " went to the terminal. Perishable products: " + van.isPerishableProducts());
         if (van.isPerishableProducts()) {
             countPerishableProductsInBase.set(countPerishableProductsInBase.get() - 1);
         }
         van.setEnumState(Van.EnumState.PROCESSING);
         if (van.getProcess() == Van.Process.LOAD) {
-            logger.log(Level.INFO, van.getName() + " начал загрузку. Портящиеся продукты: " + van.isPerishableProducts());
+            logger.log(Level.INFO, van.getName() + " started downloading. Perishable products: " + van.isPerishableProducts());
         } else {
-            logger.log(Level.INFO, van.getName() + " начал разгрузку. Портящиеся продукты: " + van.isPerishableProducts());
+            logger.log(Level.INFO, van.getName() + " started unloading. Perishable products: " + van.isPerishableProducts());
         }
         TimeUnit.MILLISECONDS.sleep(van.getRandomTime());
-        logger.log(Level.INFO, van.getName() + " отработал. Портящиеся продукты: " + van.isPerishableProducts());
+        logger.log(Level.INFO, van.getName() +  " worked. Perishable products: " + van.isPerishableProducts());
         van.setEnumState(Van.EnumState.COMPLETED);
         countParkingPlace.set(countParkingPlace.get() + 1);
-        terminals.add(van.getMyTerminal());
+        terminals.add(van.getTerminal());
     }
 }

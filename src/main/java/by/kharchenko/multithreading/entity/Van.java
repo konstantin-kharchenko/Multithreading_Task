@@ -10,7 +10,7 @@ public class Van extends Thread {
     private static final int MAXIMUM_LOAD_TIME = 10000;
     private final int randomTime;
     private final boolean perishableProducts;
-    private Terminal myTerminal;
+    private Terminal terminal;
     private EnumState state;
     private Process process;
 
@@ -41,8 +41,8 @@ public class Van extends Thread {
         return perishableProducts;
     }
 
-    public Terminal getMyTerminal() {
-        return myTerminal;
+    public Terminal getTerminal() {
+        return terminal;
     }
 
     public EnumState getEnumState() {
@@ -53,8 +53,8 @@ public class Van extends Thread {
         this.state = state;
     }
 
-    public void setMyTerminal(Terminal myTerminal) {
-        this.myTerminal = myTerminal;
+    public void setTerminal(Terminal myTerminal) {
+        this.terminal = myTerminal;
     }
 
     public Process getProcess() {
@@ -70,7 +70,7 @@ public class Van extends Thread {
     public void run() {
         try {
             this.setEnumState(EnumState.CREATED);
-            logger.log(Level.INFO, this.getName() + " стартовал. Портящиеся продукты: " + this.isPerishableProducts());
+            logger.log(Level.INFO, this.getName() + " started. Perishable products: " + this.isPerishableProducts());
             Base base = Base.getInstance();
             base.acceptVanBehindTheBase(this);
             base.workInTerminal(this);
