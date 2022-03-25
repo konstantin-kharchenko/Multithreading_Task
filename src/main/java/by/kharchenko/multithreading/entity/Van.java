@@ -20,17 +20,17 @@ public class Van extends Thread {
     }
 
 
-
     private int priority;
 
-    public Van(boolean perishableProducts, String name) {
+    public Van(boolean perishableProducts, String name, String processName) {
         super(name);
-        if(perishableProducts){
+        if (perishableProducts) {
             priority = 2;
-        }
-        else {
+        } else {
             priority = 1;
         }
+        if (processName.equals("load")) process = Process.LOAD;
+        else process = Process.UNLOAD;
         this.perishableProducts = perishableProducts;
     }
 
