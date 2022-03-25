@@ -6,22 +6,31 @@ import org.apache.logging.log4j.Logger;
 
 public class Van extends Thread {
     private static final Logger logger = LogManager.getLogger(Van.class);
-    private static final int MINIMUM_LOAD_TIME = 2000;
-    private static final int MAXIMUM_LOAD_TIME = 10000;
-    private final int randomTime;
     private final boolean perishableProducts;
     private Terminal terminal;
     private EnumState state;
     private Process process;
 
+    public int getCustomPriority() {
+        return priority;
+    }
+
+    public void setCustomPriority(int priority) {
+        this.priority = priority;
+    }
+
+
+
+    private int priority;
+
     public Van(boolean perishableProducts, String name) {
         super(name);
-        if (perishableProducts) {
-            this.setPriority(Thread.MAX_PRIORITY);
-        } else {
-            this.setPriority(Thread.MIN_PRIORITY);
+        if(perishableProducts){
+            priority = 2;
         }
-        randomTime = (int) (Math.random() * (MAXIMUM_LOAD_TIME - MINIMUM_LOAD_TIME + 1) + MINIMUM_LOAD_TIME);
+        else {
+            priority = 1;
+        }
         this.perishableProducts = perishableProducts;
     }
 
@@ -31,10 +40,6 @@ public class Van extends Thread {
 
     public enum Process {
         LOAD, UNLOAD
-    }
-
-    public int getRandomTime() {
-        return randomTime;
     }
 
     public boolean isPerishableProducts() {
@@ -77,5 +82,16 @@ public class Van extends Thread {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Van{" +
+                "perishableProducts=" + perishableProducts +
+                ", terminal=" + terminal +
+                ", state=" + state +
+                ", process=" + process +
+                ", priority=" + priority +
+                '}';
     }
 }
