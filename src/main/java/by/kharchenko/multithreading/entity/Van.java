@@ -11,24 +11,8 @@ public class Van extends Thread {
     private EnumState state;
     private Process process;
 
-    public int getCustomPriority() {
-        return priority;
-    }
-
-    public void setCustomPriority(int priority) {
-        this.priority = priority;
-    }
-
-
-    private int priority;
-
     public Van(boolean perishableProducts, String name, String processName) {
         super(name);
-        if (perishableProducts) {
-            priority = 2;
-        } else {
-            priority = 1;
-        }
         if (processName.equals("load")) process = Process.LOAD;
         else process = Process.UNLOAD;
         this.perishableProducts = perishableProducts;
@@ -91,7 +75,6 @@ public class Van extends Thread {
                 ", terminal=" + terminal +
                 ", state=" + state +
                 ", process=" + process +
-                ", priority=" + priority +
                 '}';
     }
 }

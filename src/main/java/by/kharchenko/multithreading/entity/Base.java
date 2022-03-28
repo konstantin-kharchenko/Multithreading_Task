@@ -19,8 +19,8 @@ public class Base {
     private static final int MAXIMUM_LOAD_TIME = 10000;
     private static final ReentrantLock lockGetInstance = new ReentrantLock(true);
     private static final ReentrantLock lockForQueueBehindTheBase = new ReentrantLock(true);
-    private static final ReentrantLock lockGetTerminal = new ReentrantLock(true);
     private static final ReentrantLock lockForNonPerishableProducts = new ReentrantLock(true);
+    private static final ReentrantLock lockGetTerminal = new ReentrantLock(true);
     private static final AtomicBoolean isCreate = new AtomicBoolean(false);
     private static Base instance;
     private final AtomicInteger countPerishableProductsBehindTheBase;
