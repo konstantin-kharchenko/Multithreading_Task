@@ -1,0 +1,13 @@
+Van1 false load
+Van2 true unload
+Van3 false load
+Van4 false unload
+Van5 true load
+Van6 true load
+Van7 false unload
+Van8 false load
+Van9 true unload
+Van10 false load
+Van11 false unload
+Van12 true unload
+Van13 false load
